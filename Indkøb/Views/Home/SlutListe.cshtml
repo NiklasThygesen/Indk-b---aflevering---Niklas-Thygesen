@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Indkøb.Models.TilføjVarer>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Slutlisten</title>
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+    </head>
+    <body>
+        <div class="text-center p-2">
+            <h2 class="text-center">Her er den endelige Indkøbsliste:</h2>
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                <tr><th>Name</th><th>Amount</th><th>Category</th></tr>
+                    </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Amount</td>
+                            <td>@item.Category</td>
+                            <td>
+                                <a asp-action="FjernVare" asp-route-name="@item.Name" class="btn btn-danger btn-sm">Fjern</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                </table>
+                Click
+                <a asp-action="ReturFraSlutListe">here</a> for at tilføje flere varer.
+        </div>
+    </body>
+</html>
