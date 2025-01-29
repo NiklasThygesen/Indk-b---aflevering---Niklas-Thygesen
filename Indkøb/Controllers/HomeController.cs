@@ -18,18 +18,18 @@ namespace Indkøb.Controllers
         }
 
         [HttpPost]
-        public ViewResult RegistrerIndkøb(TilføjVarer tilføjVarer)
+        public IActionResult RegistrerIndkøb(TilføjVarer tilføjVarer)
         {
-
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrEmpty(tilføjVarer.Category))
+                {
+                    tilføjVarer.Category = "Ukendt"; // Sæt en standardkategori, hvis ingen kategori vælges
+                }
                 Repository.AddTilføjVarer(tilføjVarer);
-                return View("Tilføjet", tilføjVarer);
-            } else
-            {
-                return View(tilføjVarer);
+                return RedirectToAction("SlutListe"); // Gå direkte til slutlisten
             }
-            
+            return View(tilføjVarer);
         }
 
         public IActionResult Tilføj()
@@ -39,8 +39,8 @@ namespace Indkøb.Controllers
 
         public ViewResult SlutListe()
         {
-            var items = Repository.Tilføj; // Henter listen fra repository
-            return View(items); // Sender data til viewet
+            var items = Repository.Tilføj ?? new List<TilføjVarer>(); // Garanterer, at items aldrig er null
+            return View(items);
         }
 
         public IActionResult ReturFraSlutListe()
@@ -50,7 +50,10 @@ namespace Indkøb.Controllers
 
         public IActionResult FjernVare(string name)
         {
-            Repository.RemoveTilføjVarer(name);
+            if (!string.IsNullOrEmpty(name))
+            {
+                Repository.RemoveTilføjVarer(name);
+            }
             return RedirectToAction("SlutListe");
         }
 

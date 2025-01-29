@@ -1,23 +1,22 @@
-﻿namespace Indkøb.Models
+﻿namespace Indkøb.Models;
+
+public static class Repository
 {
-    public static class Repository
+    private static List<TilføjVarer> tilføj = new List<TilføjVarer>();
+
+    public static IEnumerable<TilføjVarer> Tilføj => tilføj;
+
+    public static void AddTilføjVarer(TilføjVarer tilføjVarer)
     {
-        private static List<TilføjVarer> tilføjListe = new();
-        public static IEnumerable<TilføjVarer> Tilføj => tilføjListe;
+        tilføj.Add(tilføjVarer);
+    }
 
-        public static void AddTilføjVarer(TilføjVarer tilføj)
+    public static void RemoveTilføjVarer(string name)
+    {
+        var item = tilføj.FirstOrDefault(v => v.Name == name);
+        if (item != null)
         {
-            Console.WriteLine(tilføj);
-            tilføjListe.Add(tilføj);
-        }
-
-        public static void RemoveTilføjVarer(string name)
-        {
-            var itemToRemove = tilføjListe.FirstOrDefault(x => x.Name == name);
-            if (itemToRemove != null)
-            {
-                tilføjListe.Remove(itemToRemove);
-            }
+            tilføj.Remove(item);
         }
     }
 }
